@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans
+ 			      http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+    				http://www.springframework.org/schema/context
+    				http://www.springframework.org/schema/context/spring-context-4.1.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <bean id="mappings" class="com.github.walker.common.support.PropertyHolder">
+        <property name="locations">
+            <list>
+                 <value>classpath:config.properties</value>
+                <!-- <value>file:/app/task-center/config/config.properties</value>-->
+            </list>
+        </property>
+    </bean>
+
+    <!-- 获取Spring Context用于自定义动态注册bean和获取bean -->
+    <bean class="com.github.walker.common.support.ContextHolder"/>
+
+    <!-- 定义在加载某个Bean前后调用的逻辑-->
+    <bean id="refBeanPostProcessor" class="com.github.walker.common.support.RefBeanPostProcessor"/>
+
+    <!-- 使得被加载的Bean被代理后，仍然能够通过context.getBean()获取到。 注意，必须导入cglib.jar-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- 扫描并加载Service层注解了的@Service,@Component的类, 支持通配符* -->
+    <context:component-scan base-package="com.github.walker.basewf.*.service"/>
+    <context:component-scan base-package="com.github.walker.common.cache"/>
+
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">-->
+    <!--<property name="driverClassName" value="${jdbcDriver}"/>-->
+    <!--<property name="url" value="${jdbcUrl}"/>-->
+    <!--<property name="username" value="${username}"/>-->
+    <!--<property name="password" value="${password}"/>-->
+    <!--<property name="initialSize" value="${initialSize}"/>-->
+    <!--<property name="maxTotal" value="${maxTotal}"/>-->
+    <!--<property name="maxIdle" value="${maxIdle}"/>-->
+    <!--<property name="minIdle" value="${minIdle}"/>-->
+    <!--<property name="maxWaitMillis" value="${maxWaitMillis}"/>-->
+    <!--<property name="removeAbandonedTimeout" value="120"/>-->
+    <!--<property name="testOnBorrow" value="true"/>-->
+    <!--<property name="validationQuery" value="select 1"/>-->
+    <!--</bean>-->
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbcDriver}" />
+        <property name="url" value="${jdbcUrl}" />
+        <property name="username" value="${username}" />
+        <property name="password" value="${password}" />
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${initialSize}" />
+        <property name="minIdle" value="${minIdle}" />
+        <property name="maxActive" value="${maxActive}" />
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="50000" />
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="validationQuery" value="select 1 from dual" />
+    </bean>
+
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 定义注解驱动的事务 -->
+    <tx:annotation-driven transaction-manager="txManager"/>
+
+
+    <!-- 定义拦截器方式的事务 -->
+    <!--
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
+
+            <tx:method name="find*" propagation="SUPPORTS" rollback-for="Exception"/>
+
+            <tx:method name="*" propagation="NOT_SUPPORTED"/>
+
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="txPointcut" expression="execution(* com.mucfc.taskcenter.service.*Service.*(..))"/>
+        <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"/>
+    </aop:config>
+    -->
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+
+        <!-- 为其下的包定义别名 -->
+        <property name="typeAliasesPackage" value="com.github.walker.basewf.sysmgr.vo
+                                                  ,com.github.walker.basewf.auth.vo"/>
+
+        <!-- 载入mybatis配置 -->
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <property name="mapperLocations" value="classpath*:com/github/walker/basewf/*/dao/*.xml"/>
+    </bean>
+
+    <!-- 扫描并加载 basePackage下的DAO/Mapper接口 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.github.walker.basewf.*.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+</beans>
