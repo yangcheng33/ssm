@@ -1,4 +1,4 @@
-package com.github.walker.common.utils;
+package com.github.vita.ssm.common.utils;
 
 
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package com.github.walker.basewf.auth.service;
+package com.github.vita.ssm.biz.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

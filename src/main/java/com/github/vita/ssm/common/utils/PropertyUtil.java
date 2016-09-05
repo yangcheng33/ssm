@@ -1,5 +1,6 @@
-package com.github.walker.common.utils;
+package com.github.vita.ssm.common.utils;
 
+import com.github.vita.ssm.common.vo.BasicForm;
 import com.github.vita.ssm.common.vo.BasicVo;
 
 import java.lang.reflect.Field;

@@ -1,4 +1,4 @@
-package com.github.walker.common.support;
+package com.github.vita.ssm.web.support;
 
 import javax.servlet.*;
 import java.io.IOException;

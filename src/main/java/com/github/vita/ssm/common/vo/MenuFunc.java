@@ -1,4 +1,4 @@
-package com.github.walker.basewf.auth.vo;
+package com.github.vita.ssm.common.vo;
 
 import com.github.vita.ssm.common.vo.BasicVo;
 

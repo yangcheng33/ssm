@@ -1,6 +1,5 @@
-package com.github.vita.ssm.auth.dao;
+package com.github.vita.ssm.common.dal;
 
-import com.github.walker.basewf.auth.vo.Menu;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,7 +10,6 @@ public interface MenuDao extends BasicDao {
 
     public List findSubMenus(@Param("userId") Long userId, @Param("menuId") Long menuId);
 
-    public Menu findByUK(@Param("code") String code);
 
 }
 

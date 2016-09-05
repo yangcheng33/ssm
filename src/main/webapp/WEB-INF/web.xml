@@ -19,10 +19,16 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!-- Introspector内省缓存清除监听器,防止内存泄露-->
+    <listener>
+        <listener-class>
+            org.springframework.web.util.IntrospectorCleanupListener
+        </listener-class>
+    </listener>
 
     <!-- DispatcherServlet从WEB-INF下加载  springmvc-servlet.xml-->
     <servlet>
-        <!-- 对应 springmvc-servlet.xml -->
+        <!-- 默认加载servletname-servlet.xml文件,或者添加指定配置init-param/param-name/contextConfigLocation-->
         <servlet-name>springmvc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -36,7 +42,7 @@
 
     <filter>
         <filter-name>sessionFilter</filter-name>
-        <filter-class>com.github.walker.common.support.SessionFilter</filter-class>
+        <filter-class>com.github.vita.ssm.web.support.SessionFilter</filter-class>
     </filter>
 
     <filter>

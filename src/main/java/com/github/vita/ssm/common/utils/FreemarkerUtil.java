@@ -1,4 +1,4 @@
-package com.github.walker.common.utils;
+package com.github.vita.ssm.common.utils;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
+
+import static sun.rmi.transport.TransportConstants.Version;
 
 /**
  * Created by HuQingmiao on 2016-1-16.

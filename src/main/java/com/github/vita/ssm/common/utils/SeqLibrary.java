@@ -1,4 +1,4 @@
-package com.github.walker.common.utils;
+package com.github.vita.ssm.common.utils;
 
 
 import com.github.vita.ssm.common.vo.BasicVo;

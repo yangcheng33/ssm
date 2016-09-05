@@ -1,6 +1,8 @@
-package com.github.vita.ssm.auth.dao;  //改为你工程的相应package
+package com.github.vita.ssm.common.dal;  //改为你工程的相应package
 
-import com.github.walker.mybatis.paginator.PageBounds;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.vita.ssm.common.vo.BasicVo;
 
 import java.util.List;
 import java.util.Map;

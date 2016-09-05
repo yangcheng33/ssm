@@ -1,4 +1,4 @@
-package com.github.walker.common.utils;
+package com.github.vita.ssm.common.utils;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

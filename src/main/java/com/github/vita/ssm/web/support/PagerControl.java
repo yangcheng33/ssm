@@ -1,4 +1,4 @@
-package com.github.walker.common.support;
+package com.github.vita.ssm.web.support;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

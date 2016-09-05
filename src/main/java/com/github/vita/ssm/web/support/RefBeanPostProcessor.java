@@ -1,7 +1,6 @@
-package com.github.walker.common.support;
+package com.github.vita.ssm.web.support;
 
-import com.github.walker.common.cache.MenuFuncCache;
-import com.github.walker.common.cache.UserAuthCache;
+import com.github.vita.ssm.biz.cache.MenuFuncCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -16,12 +15,10 @@ public class RefBeanPostProcessor implements BeanPostProcessor {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Override
     public Object postProcessBeforeInitialization(Object arg0, String arg1) throws BeansException {
         return arg0;
     }
 
-    @Override
     public Object postProcessAfterInitialization(Object arg0, String arg1) throws BeansException {
         try {
 //            log.info("<<<" + arg0.getClass().getName() + "     " + arg1);
@@ -31,9 +28,6 @@ public class RefBeanPostProcessor implements BeanPostProcessor {
 
             if (arg0 instanceof MenuFuncCache) {
                 ((MenuFuncCache) arg0).load();
-            }
-            if (arg0 instanceof UserAuthCache) {
-                ((UserAuthCache) arg0).load();
             }
 
         } catch (Exception e) {

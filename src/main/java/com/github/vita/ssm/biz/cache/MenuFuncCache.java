@@ -1,7 +1,7 @@
-package com.github.walker.common.cache;
+package com.github.vita.ssm.biz.cache;
 
-import com.github.walker.basewf.auth.service.MenuFuncService;
-import com.github.walker.basewf.auth.vo.MenuFunc;
+import com.github.vita.ssm.biz.service.MenuService;
+import com.github.vita.ssm.common.vo.MenuFunc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +26,12 @@ public class MenuFuncCache {
     private final static Map<Long, List<MenuFunc>> menuFuncMap = new ConcurrentHashMap<Long, List<MenuFunc>>();
 
     @Autowired
-    private MenuFuncService menuFuncService;
+    private MenuService menuService;
 
     public void load() throws Exception {
         log.info("[BEGIN]从表menu_func加载功能项...");
         try {
-            List<MenuFunc> menuFuncList = menuFuncService.findFuncList(null);
+            List<MenuFunc> menuFuncList = menuService.findUserMenus(null);
             log.info("menuFuncList.size():" + menuFuncList.size());
 
             for (MenuFunc mf : menuFuncList) {

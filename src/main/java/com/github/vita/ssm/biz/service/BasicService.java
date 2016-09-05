@@ -1,4 +1,4 @@
-package com.github.vita.ssm.auth.biz;
+package com.github.vita.ssm.biz.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

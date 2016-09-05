@@ -34,9 +34,7 @@
     </bean>
 
     <!-- 扫描并加载control层的类 -->
-    <context:component-scan base-package="com.github.walker.basewf.*.control"/>
-
-    <context:annotation-config />
+    <context:component-scan base-package="com.github.vita.ssm.web"/>
 
     <mvc:annotation-driven />
 

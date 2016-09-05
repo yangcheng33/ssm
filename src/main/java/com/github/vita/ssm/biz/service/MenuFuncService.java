@@ -1,14 +1,10 @@
-package com.github.walker.basewf.auth.service;
+package com.github.vita.ssm.biz.service;
 
-import com.github.walker.basewf.auth.vo.MenuFunc;
-import com.github.walker.basewf.auth.vo.RoleMenu;
-import com.github.vita.ssm.auth.biz.BasicService;
-import com.github.walker.common.cache.MenuFuncCache;
-import com.github.walker.common.cache.UserAuthCache;
-import com.github.walker.common.utils.CommonUtil;
-import com.github.walker.common.utils.DateTimeUtil;
-import com.github.walker.mybatis.paginator.Order;
-import com.github.walker.mybatis.paginator.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.vita.ssm.biz.cache.MenuFuncCache;
+import com.github.vita.ssm.common.dal.MenuFuncDao;
+import com.github.vita.ssm.common.utils.DateTimeUtil;
+import com.github.vita.ssm.common.vo.MenuFunc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,13 +25,8 @@ public class MenuFuncService extends BasicService {
     private MenuFuncDao menuFuncDao;
 
     @Autowired
-    private RoleMenuDao roleMenuDao;
-
-    @Autowired
     private MenuFuncCache menuFuncCache;
 
-    @Autowired
-    private UserAuthCache userAuthCache;
 
     /**
      * 查找某个菜单下的功能项
@@ -51,7 +42,7 @@ public class MenuFuncService extends BasicService {
             paramMap.put("menuId", menuId);
         }
 
-        PageBounds pageBounds = new PageBounds(Order.formString("name.asc"));
+        PageBounds pageBounds = new PageBounds();
         return menuFuncDao.find(paramMap, pageBounds);
     }
 
@@ -78,23 +69,6 @@ public class MenuFuncService extends BasicService {
         return (MenuFunc) menuFuncDao.findByPK(funcId);
     }
 
-    public MenuFunc findByUK(Long menuId, String code) throws Exception {
-        return menuFuncDao.findByUK(menuId, code);
-    }
-
-    /**
-     * 新增功能项
-     *
-     * @param menuFunc
-     * @throws Exception
-     */
-    public void addMenuFunc(MenuFunc menuFunc) throws Exception {
-        menuFunc.setCreateTime(DateTimeUtil.currentTime());
-        menuFuncDao.save(menuFunc);
-
-        // 更新缓存
-        menuFuncCache.refresh();
-    }
 
 
     /**
@@ -109,41 +83,6 @@ public class MenuFuncService extends BasicService {
 
         // 更新缓存
         menuFuncCache.refresh();
-        userAuthCache.refreshUserMenuFuncCache();
     }
 
-    /**
-     * 删除菜单其下的功能项
-     *
-     * @param menuId
-     * @param funcId
-     * @throws Exception
-     */
-    public void deleteMenuFunc(Long menuId, Long funcId) throws Exception {
-
-        HashMap<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("menuId", menuId);
-
-        // 找出涉及到本功能项的关联记录，对其更新
-        List<RoleMenu> roleMenuList = roleMenuDao.find(paramMap, new PageBounds());
-        for (RoleMenu roleMenu : roleMenuList) {
-            String funcIds = roleMenu.getFuncIds();
-            if (funcIds == null) {
-                continue;
-            }
-            Set<String> funcIdSet = CommonUtil.toSet(funcIds, ",");
-            if (funcIdSet.contains(funcId.toString())) {
-                funcIdSet.remove(funcIds.toString());
-            }
-            roleMenu.setFuncIds(CommonUtil.toString(funcIdSet, ","));
-            roleMenuDao.update(roleMenu);
-        }
-
-        // 删除功能项
-        menuFuncDao.deleteByPK(funcId);
-
-        // 更新缓存
-        menuFuncCache.refresh();
-        userAuthCache.refreshUserMenuFuncCache();
-    }
 }
