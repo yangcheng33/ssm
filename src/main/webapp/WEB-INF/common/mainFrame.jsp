@@ -124,7 +124,7 @@
         <img src="${base}/common/images/arrowsa1.gif" width="7px" height="80px" />
     </div>
 
-    <iframe id="content" name="bodyFrame" src="${base}/common/body.jsp" width="85%" height="88%"></iframe>
+    <iframe id="content" name="bodyFrame" src="${base}/WEB-INF/common/body.jsp" width="85%" height="88%"></iframe>
 </div>
 
 </body>

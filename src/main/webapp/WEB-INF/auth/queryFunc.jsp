@@ -92,7 +92,7 @@
 
             <!-- 分页控件栏 -->
             <div style="text-align: center">
-                <jsp:include page="/common/pagerPanel.jsp" flush="true"/>
+                <jsp:include page="/WEB-INF/common/pagerPanel.jsp" flush="true"/>
             </div>
 
         </div>

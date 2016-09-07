@@ -12,8 +12,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
-    .menu_link6    {  font-family:"Microsoft YaHei", "宋体", "Arial", "Haettenschweiler"; font-size:14px; font-weight:bold; color:#006666; background-image:url(../common/images/menu/leftmenu_bg.gif); letter-spacing:1pt; text-align:left; text-indent:-1pt}
-    .submenu_link6 {  font-family:"Microsoft YaHei", "宋体", "Arial", "Haettenschweiler"; font-size:14px; color:#006666; background-image:url(../common/images/menu/submenu_link_bg.gif); letter-spacing:0pt; text-align:left; text-indent:28pt}
+    .menu_link6    {  font-family:"Microsoft YaHei", "宋体", "Arial", "Haettenschweiler"; font-size:14px; font-weight:bold; color:#006666; background-image:url(../../common/images/menu/leftmenu_bg.gif); letter-spacing:1pt; text-align:left; text-indent:-1pt}
+    .submenu_link6 {  font-family:"Microsoft YaHei", "宋体", "Arial", "Haettenschweiler"; font-size:14px; color:#006666; background-image:url(../../common/images/menu/submenu_link_bg.gif); letter-spacing:0pt; text-align:left; text-indent:28pt}
     </style>
 </head>
 

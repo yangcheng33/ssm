@@ -20,11 +20,11 @@
     </listener>
 
     <!-- Introspector内省缓存清除监听器,防止内存泄露-->
-    <listener>
-        <listener-class>
-            org.springframework.web.util.IntrospectorCleanupListener
-        </listener-class>
-    </listener>
+    <!--<listener>-->
+        <!--<listener-class>-->
+            <!--org.springframework.web.util.IntrospectorCleanupListener-->
+        <!--</listener-class>-->
+    <!--</listener>-->
 
     <!-- DispatcherServlet从WEB-INF下加载  springmvc-servlet.xml-->
     <servlet>

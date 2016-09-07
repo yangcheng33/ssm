@@ -26,7 +26,7 @@
                 <a href="#">Home</a>
             </li>
 
-            <li>角色管理</li>
+            <li>菜单管理</li>
             <li class="active">查询</li>
         </ul>
         <!-- /.breadcrumb -->
@@ -44,55 +44,57 @@
             </div>
         </c:if>
 
-        <sf:form id="queryForm" action="${base}/auth/role/query" modelAttribute="form">
-            <sf:input path="id" cssStyle="visibility: hidden"/>
-            <sf:input path="CURR_PAGENUM" cssStyle="visibility: hidden"/>
+        <sf:form id="queryForm" action="${base}/auth/menu/query" modelAttribute="form">
+        <sf:input path="id" cssStyle="visibility: hidden"/>
+        <sf:input path="CURR_PAGENUM" cssStyle="visibility: hidden"/>
 
-            <div class="widget-box">
-                <div class="widget-header widget-header-small">
-                    <h5 class="widget-title lighter">Search Form</h5>
-                </div>
+        <div class="widget-box">
+            <div class="widget-header widget-header-small">
+                <h5 class="widget-title lighter">Search Form</h5>
+            </div>
 
-                <div class="widget-body">
-                    <div class="widget-main">
-                        <div class="row" style="width: 100%;">
-                            <div class="input-group" style="width: 100%;">
-                                <label style="width: 12%; text-align: right">角色名称&nbsp;</label>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div class="row" style="width: 100%;">
+                        <div class="input-group" style="width: 100%;">
 
-                                <span style="width: 20%; text-align: left">
-                                    <sf:input class="search-query" path="criaName" size="15" maxlength="15"/>
-                                </span>
+                            <label style="width: 12%; text-align: right">父菜单名称&nbsp;</label>
 
-                                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <button id="queryBtn" type="button">
-                                        查 询
-                                    </button>
-                                </span>
-                            </div>
+                            <span style="width: 20%; text-align: left">
+                                <sf:input class="search-query" path="criaPname" size="15" maxlength="15"/>
+                            </span>
+
+                            <label style="width: 12%; text-align: right">菜单名称&nbsp;</label>
+
+                            <span style="width: 20%; text-align: left">
+                                <sf:input class="search-query" path="criaName" size="15" maxlength="15"/>
+                            </span>
+
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button id="queryBtn" type="button">
+                                    查 询
+                                </button>
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </sf:form>
 
         <!-- PAGE CONTENT BEGINS -->
         <div class="row">
-            <table id="simple-table" class="table table-striped table-bordered table-hover">
+            <table id="simple-table" class="table table-striped table-bordered table-hover" >
                 <thead>
                 <tr>
-                    <!--
+                    <th class="center">父菜单名称</th>
+                    <th class="center">菜单名称</th>
+                    <th class="center">菜单编码</th>
+                    <th class="center">菜单url</th>
+                    <th class="center">功能项</th>
                     <th class="center">
-                        <label class="pos-rel">
-                            <input type="checkbox" class="ace"/>
-                            <span class="lbl"></span>
-                        </label>
-                    </th>
-                    -->
-                    <th class="center">角色名称</th>
-                    <th class="center">备注</th>
-                    <th class="center" width="25%">
                         <button id="toAddBtn" type="button">
-                            新 增
+                            新增一级菜单
                         </button>
                     </th>
                 </tr>
@@ -101,24 +103,32 @@
                 <tbody>
                 <c:forEach var="item" items="${rsList}">
                     <tr>
-                        <!--
-                        <td class="center">
-                            <label class="pos-rel">
-                                <input type="checkbox" class="ace"/>
-                                <span class="lbl"></span>
-                            </label>
-                        </td>
-                        -->
+                        <td>${item.pname}</td>
                         <td>${item.name}</td>
-                        <td>${item.remark}</td>
+                        <td>${item.code}</td>
+                        <td>${item.url}</td>
+                        <td>
+                            <c:choose>
+                            <c:when test="${item.funcItems!=null && item.funcItems!='' }">
+                                <a href="#" onclick="toListFunc('${item.id}')">
+                                    ${item.funcItems}
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="#" onclick="toListFunc('${item.id}')">
+                                     <span style="font-style: italic; color: orange;">没有绑定功能项</span>
+                                </a>
+                            </c:otherwise>
+                            </c:choose>
+                        </td>
                         <td align="center" nowrap>
                             <a href="#" onclick="toUpdate('${item.id}')">修改</a>
                             &nbsp
                             <a href="#" onclick="del('${item.id}')">删除</a>
                             &nbsp
-                            <a href="#" onclick="toBindMenus('${item.id}')">绑定菜单及功能项</a>
-                            &nbsp
-                            <a href="#" onclick="toBindProds('${item.id}')">绑定产品及数据</a>
+                            <c:if test='${item.pid == 0}'>
+                                <a href="#" onclick="toAdd('${item.id}')">添加子菜单</a>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>
@@ -127,7 +137,7 @@
 
             <!-- 分页控件栏 -->
             <div style="text-align: center">
-                <jsp:include page="/common/pagerPanel.jsp" flush="true"/>
+                <jsp:include page="/WEB-INF/common/pagerPanel.jsp" flush="true"/>
             </div>
 
         </div>
@@ -157,43 +167,43 @@
         }
     }
 
-
     $("#queryBtn").click(function () {
         $('#CURR_PAGENUM').val("1");//重置页码
+        //$("#queryForm").attr("method", "get");
         $("#queryForm").submit();
     });
 
     $("#toAddBtn").click(function () {
-        var path = "${base}/auth/role/toAdd";
+        var path = "${base}/auth/menu/toAdd";
+        $("#id").attr("value", "0");
         $('#queryForm').attr("action", path).submit();
     });
 
+    function toAdd(id) {
+        var path = "${base}/auth/menu/toAdd";
+        $("#id").attr("value", id);
+        $('#queryForm').attr("action", path).submit();
+    }
+
+
     function toUpdate(id) {
-        var path = "${base}/auth/role/toUpdate";
+        var path = "${base}/auth/menu/toUpdate";
         $("#id").attr("value", id);
         $('#queryForm').attr("action", path).submit();
     }
 
     function del(id) {
-        if(confirm("您确定要删除此角色吗？")){
-            var path = "${base}/auth/role/del";
+        if (confirm("如您确定要删除此菜单吗? ")) {
+            var path = "${base}/auth/menu/del";
             $("#id").attr("value", id);
             $('#queryForm').attr("action", path).submit();
         }
     }
 
-    function toBindMenus(id){
-        var path = "${base}/auth/role/toBindMenus";
-        $("#id").attr("value", id);
-        $('#queryForm').attr("action", path).submit();
+    function toListFunc(id) {
+        var path = "${base}/auth/func/query?menuId="+id;
+        popWindow(path,800,520);
     }
-
-    function toBindProds(id){
-        var path = "${base}/auth/role/toBindProds";
-        $("#id").attr("value", id);
-        $('#queryForm').attr("action", path).submit();
-    }
-
 </script>
 
 </body>
