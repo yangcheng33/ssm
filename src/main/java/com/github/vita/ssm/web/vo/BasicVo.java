@@ -1,4 +1,4 @@
-package com.github.vita.ssm.common.vo;  //改为你工程的相应package
+package com.github.vita.ssm.web.vo;  //改为你工程的相应package
 
 import com.alibaba.fastjson.JSONObject;
 

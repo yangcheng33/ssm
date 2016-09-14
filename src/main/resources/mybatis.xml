@@ -25,6 +25,11 @@
         <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
     </settings>
 
+    <!-- 与使用@Alias("User")的效果一致 -->
+    <typeAliases>
+        <typeAlias type="net.mybatis.model.User" alias="User"/>
+    </typeAliases>
+
     <plugins>
         <!-- 分页查询拦截器 -->
         <plugin interceptor="com.github.walker.mybatis.paginator.OffsetLimitInterceptor">

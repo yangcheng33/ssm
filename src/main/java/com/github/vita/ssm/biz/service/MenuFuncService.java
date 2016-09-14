@@ -4,7 +4,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.vita.ssm.biz.cache.MenuFuncCache;
 import com.github.vita.ssm.common.dal.MenuFuncDao;
 import com.github.vita.ssm.common.utils.DateTimeUtil;
-import com.github.vita.ssm.common.vo.MenuFunc;
+import com.github.vita.ssm.web.vo.MenuFunc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author HuQingmiao

@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Created by HuQingmiao on 2015-8-24.
+ * 存储spring读取到的property信息,用于后续使用
  */
 public class PropertyHolder extends PropertyPlaceholderConfigurer {
 

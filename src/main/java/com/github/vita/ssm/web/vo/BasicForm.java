@@ -1,4 +1,4 @@
-package com.github.vita.ssm.common.vo;
+package com.github.vita.ssm.web.vo;
 
 /**
  * BasicForm

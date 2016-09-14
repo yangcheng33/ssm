@@ -1,7 +1,7 @@
 package com.github.vita.ssm.common.dal;
 
 
-import com.github.vita.ssm.common.vo.MenuFunc;
+import com.github.vita.ssm.web.vo.MenuFunc;
 import org.apache.ibatis.annotations.Param;
 
 public interface MenuFuncDao extends BasicDao {

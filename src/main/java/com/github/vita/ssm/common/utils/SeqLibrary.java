@@ -1,7 +1,7 @@
 package com.github.vita.ssm.common.utils;
 
 
-import com.github.vita.ssm.common.vo.BasicVo;
+import com.github.vita.ssm.web.vo.BasicVo;
 
 public class SeqLibrary extends BasicVo {
     private static final long serialVersionUID = 1L;

@@ -1,6 +1,6 @@
-package com.github.vita.ssm.common.vo;
+package com.github.vita.ssm.web.vo;
 
-import com.github.vita.ssm.common.vo.BasicVo;
+import com.github.vita.ssm.web.vo.BasicVo;
 
 import java.sql.Timestamp;
 import java.util.List;

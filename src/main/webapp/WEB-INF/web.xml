@@ -2,7 +2,7 @@
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-            http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+            http://java.sun.com/xml/ns/javaee/web-app_3_1.xsd">
 
     <display-name>Archetype Created Web Application</display-name>
 
@@ -21,9 +21,9 @@
 
     <!-- Introspector内省缓存清除监听器,防止内存泄露-->
     <!--<listener>-->
-        <!--<listener-class>-->
-            <!--org.springframework.web.util.IntrospectorCleanupListener-->
-        <!--</listener-class>-->
+    <!--<listener-class>-->
+    <!--org.springframework.web.util.IntrospectorCleanupListener-->
+    <!--</listener-class>-->
     <!--</listener>-->
 
     <!-- DispatcherServlet从WEB-INF下加载  springmvc-servlet.xml-->
@@ -50,10 +50,13 @@
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter
         </filter-class>
         <init-param>
+            <!-- 等价于ServletRequest.setCharacterEncoding(java.lang.String) -->
             <param-name>encoding</param-name>
             <param-value>UTF-8</param-value>
         </init-param>
         <init-param>
+            <!-- 追加设置ServletResponse的编码格式同ServletRequest的编码格式一致
+                即response.setCharacterEncoding(“XXXX”),认值为false -->
             <param-name>forceEncoding</param-name>
             <param-value>true</param-value>
         </init-param>
@@ -69,8 +72,32 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
+
+    <!-- 配置session超时时间，单位分钟 -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- 访问根目录时采用欢迎界面路径 -->
+    <!--<welcome-file-list>-->
+        <!--<welcome-file>index.jsp</welcome-file>-->
+    <!--</welcome-file-list>-->
+
+    <!-- 错误跳转页面 -->
+    <!--<error-page>-->
+        <!--&lt;!&ndash; 路径不正确 &ndash;&gt;-->
+        <!--<error-code>404</error-code>-->
+        <!--<location>/WEB-INF/errorpage/404.jsp</location>-->
+    <!--</error-page>-->
+    <!--<error-page>-->
+        <!--&lt;!&ndash; 没有访问权限，访问被禁止 &ndash;&gt;-->
+        <!--<error-code>405</error-code>-->
+        <!--<location>/WEB-INF/errorpage/405.jsp</location>-->
+    <!--</error-page>-->
+    <!--<error-page>-->
+        <!--&lt;!&ndash; 内部错误 &ndash;&gt;-->
+        <!--<error-code>500</error-code>-->
+        <!--<location>/WEB-INF/errorpage/500.jsp</location>-->
+    <!--</error-page>-->
 
 </web-app>

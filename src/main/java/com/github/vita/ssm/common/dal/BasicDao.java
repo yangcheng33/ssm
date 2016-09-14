@@ -2,7 +2,7 @@ package com.github.vita.ssm.common.dal;  //改为你工程的相应package
 
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.github.vita.ssm.common.vo.BasicVo;
+import com.github.vita.ssm.web.vo.BasicVo;
 
 import java.util.List;
 import java.util.Map;

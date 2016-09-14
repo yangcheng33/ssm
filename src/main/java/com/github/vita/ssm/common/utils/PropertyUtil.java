@@ -1,7 +1,7 @@
 package com.github.vita.ssm.common.utils;
 
-import com.github.vita.ssm.common.vo.BasicForm;
-import com.github.vita.ssm.common.vo.BasicVo;
+import com.github.vita.ssm.web.vo.BasicForm;
+import com.github.vita.ssm.web.vo.BasicVo;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -24,7 +24,7 @@ public class PropertyUtil {
      * @param form
      * @param vo
      */
-    public static void copyProperties(BasicForm form, BasicVo vo)
+    public static void copyProperties(Object form, BasicVo vo)
             throws Exception {
         try {
             //po的属性及类型

@@ -1,7 +1,7 @@
 package com.github.vita.ssm.biz.cache;
 
 import com.github.vita.ssm.biz.service.MenuService;
-import com.github.vita.ssm.common.vo.MenuFunc;
+import com.github.vita.ssm.web.vo.MenuFunc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

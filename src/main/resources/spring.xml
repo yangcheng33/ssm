@@ -15,80 +15,50 @@
 						http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
-    <bean id="mappings" class="com.github.walker.common.support.PropertyHolder">
+    <bean id="mappings"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                 <value>classpath:config.properties</value>
-                <!-- <value>file:/app/task-center/config/config.properties</value>-->
+                <value>classpath*:config.properties</value>
             </list>
         </property>
     </bean>
 
-    <!-- 获取Spring Context用于自定义动态注册bean和获取bean -->
-    <bean class="com.github.walker.common.support.ContextHolder"/>
-
     <!-- 定义在加载某个Bean前后调用的逻辑-->
-    <bean id="refBeanPostProcessor" class="com.github.walker.common.support.RefBeanPostProcessor"/>
+    <bean id="refBeanPostProcessor" class="com.github.vita.ssm.web.support.RefBeanPostProcessor"/>
 
     <!-- 使得被加载的Bean被代理后，仍然能够通过context.getBean()获取到。 注意，必须导入cglib.jar-->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-    <!-- 扫描并加载Service层注解了的@Service,@Component的类, 支持通配符* -->
-    <context:component-scan base-package="com.github.walker.basewf.*.service"/>
-    <context:component-scan base-package="com.github.walker.common.cache"/>
+    <!-- 扫描并加载Service层注解了的@Service,@Component等的类, 支持通配符*和**,逗号分隔多个包路径 -->
+    <context:component-scan base-package="com.github.vita.ssm.biz"/>
 
-    <!--<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">-->
-    <!--<property name="driverClassName" value="${jdbcDriver}"/>-->
-    <!--<property name="url" value="${jdbcUrl}"/>-->
-    <!--<property name="username" value="${username}"/>-->
-    <!--<property name="password" value="${password}"/>-->
-    <!--<property name="initialSize" value="${initialSize}"/>-->
-    <!--<property name="maxTotal" value="${maxTotal}"/>-->
-    <!--<property name="maxIdle" value="${maxIdle}"/>-->
-    <!--<property name="minIdle" value="${minIdle}"/>-->
-    <!--<property name="maxWaitMillis" value="${maxWaitMillis}"/>-->
-    <!--<property name="removeAbandonedTimeout" value="120"/>-->
-    <!--<property name="testOnBorrow" value="true"/>-->
-    <!--<property name="validationQuery" value="select 1"/>-->
-    <!--</bean>-->
 
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-        <property name="driverClassName" value="${jdbcDriver}" />
-        <property name="url" value="${jdbcUrl}" />
-        <property name="username" value="${username}" />
-        <property name="password" value="${password}" />
 
-        <!-- 配置初始化大小、最小、最大 -->
-        <property name="initialSize" value="${initialSize}" />
-        <property name="minIdle" value="${minIdle}" />
-        <property name="maxActive" value="${maxActive}" />
+    <!-- 配置MyBatis session工厂 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
 
-        <!-- 配置获取连接等待超时的时间 -->
-        <property name="maxWait" value="50000" />
+        <!-- 对应实体类所在的包，将自动取对应包中不包括包名的简单类名作为带包名的别名 -->
+        <property name="typeAliasesPackage" value="com.github.vita.ssm.web.vo
+                                                  ,com.github.vita.ssm.common.po"/>
 
-        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-        <property name="timeBetweenEvictionRunsMillis" value="60000" />
-
-        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-        <property name="minEvictableIdleTimeMillis" value="300000" />
-
-        <property name="testWhileIdle" value="true" />
-        <property name="testOnBorrow" value="false" />
-        <property name="testOnReturn" value="false" />
-        <property name="validationQuery" value="select 1 from dual" />
+        <!-- 载入mybatis配置 -->
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <property name="mapperLocations" value="classpath*:com/github/vita/ssm/**/mapper/*.xml"/>
     </bean>
 
-    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <!-- 事务管理 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <!-- 定义注解驱动的事务 -->
-    <tx:annotation-driven transaction-manager="txManager"/>
+    <!-- 第一种方式: 注解方式配置事物 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
-
-    <!-- 定义拦截器方式的事务 -->
+    <!-- 第二种方式: 定义拦截器方式的事务 -->
     <!--
-    <tx:advice id="txAdvice" transaction-manager="txManager">
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
             <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception"/>
@@ -103,27 +73,51 @@
     </tx:advice>
 
     <aop:config>
-        <aop:pointcut id="txPointcut" expression="execution(* com.mucfc.taskcenter.service.*Service.*(..))"/>
+        <aop:pointcut id="txPointcut" expression="execution(* com.xxx.xxx.service.*Service.*(..))"/>
         <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice"/>
     </aop:config>
     -->
 
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-
-        <!-- 为其下的包定义别名 -->
-        <property name="typeAliasesPackage" value="com.github.walker.basewf.sysmgr.vo
-                                                  ,com.github.walker.basewf.auth.vo"/>
-
-        <!-- 载入mybatis配置 -->
-        <property name="configLocation" value="classpath:mybatis.xml"/>
-        <property name="mapperLocations" value="classpath*:com/github/walker/basewf/*/dao/*.xml"/>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.github.vita.ssm.common.dal"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 
     <!-- 扫描并加载 basePackage下的DAO/Mapper接口 -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.github.walker.basewf.*.dao"/>
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbcDriver}"/>
+        <property name="url" value="${jdbcUrl}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="${initialSize}"/>
+        <!-- 连接池最小空闲量 -->
+        <property name="minIdle" value="${minIdle}"/>
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="${maxActive}"/>
+        <!-- 配置获取连接最长等待超时的时间 -->
+        <property name="maxWait" value="50000"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <!-- 超过时间限制是否回收 -->
+        <property name="removeAbandoned" value="true"/>
+        <!-- 180秒，也就是3分钟 -->
+        <property name="removeAbandonedTimeout" value="180"/>
+        <!-- 关闭abandon连接时输出错误日志 -->
+        <property name="logAbandoned" value="true"/>
+        <!-- 监控数据库 -->
+        <property name="filters" value="mergeStat"/>
+        <!-- 连接闲置时验证有效性 -->
+        <property name="testWhileIdle" value="true"/>
+        <!--testOnBorrow和testOnReturn在生产环境一般不开启，主要是性能考虑。失效连接主要通过testWhileIdle保证，如果获取到了不可用的数据库连接，一般由应用处理异常-->
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <!-- 验证连接仍然保持的请求sql -->
+        <property name="validationQuery" value="select 1"/>
     </bean>
 
 </beans>

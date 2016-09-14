@@ -2,7 +2,6 @@ package com.github.vita.ssm;
 
 
 import com.github.vita.ssm.biz.service.MenuService;
-import com.github.vita.ssm.common.dal.MenuDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.*;
 
@@ -19,7 +19,9 @@ import java.util.*;
  * @author HuQingmiao
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring.xml"})
+@ContextConfiguration(locations = {"classpath:spring.xml", "file:src/main/webapp/WEB-INF/springmvc-servlet.xml"})
+// 标明是web应用测试
+@WebAppConfiguration(value = "src/main/webapp") //可以不填，默认此目录
 @TransactionConfiguration(defaultRollback = false)
 public class TestService {
 
