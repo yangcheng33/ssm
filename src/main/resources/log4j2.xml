@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration status="error">
     <appenders>
-        <Console name="Console" target="SYSTEM_OUT">
+        <Console name="console" target="SYSTEM_OUT" >
             <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <PatternLayout charset="UTF-8" pattern="%d{HH:mm:ss.SSS} %-5level %c{36} %L %M - %msg%xEx%n"/>
         </Console>
 
     </appenders>
     <loggers>
         <root level="info">
-            <appender-ref ref="Console"/>
-            <!--  <appender-ref ref="Console"/> -->
+            <appender-ref ref="console"/>
         </root>
     </loggers>
 </configuration>

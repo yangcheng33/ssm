@@ -31,8 +31,9 @@
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- 扫描并加载Service层注解了的@Service,@Component等的类, 支持通配符*和**,逗号分隔多个包路径 -->
+    <!--include-filter & exclude-filter see http://docs.spring.io/spring/docs/3.0.0.M4/reference/html/ch03s10.html-->
     <context:component-scan base-package="com.github.vita.ssm.biz"/>
-
+    <context:component-scan base-package="com.github.vita.ssm.common.dal"/>
 
 
     <!-- 配置MyBatis session工厂 -->
@@ -49,7 +50,8 @@
     </bean>
 
     <!-- 事务管理 -->
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 

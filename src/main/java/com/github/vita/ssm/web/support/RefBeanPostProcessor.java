@@ -27,7 +27,7 @@ public class RefBeanPostProcessor implements BeanPostProcessor {
 //            }
 
             if (arg0 instanceof MenuFuncCache) {
-                ((MenuFuncCache) arg0).load();
+//                ((MenuFuncCache) arg0).load();
             }
 
         } catch (Exception e) {

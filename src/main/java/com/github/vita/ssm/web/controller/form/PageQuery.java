@@ -1,7 +1,7 @@
 package com.github.vita.ssm.web.controller.form;
 
 /**
- * 分页查询基础对象
+ * 鍒嗛〉鏌ヨ鍩虹瀵硅薄
  */
 public class PageQuery {
 	private int page;
