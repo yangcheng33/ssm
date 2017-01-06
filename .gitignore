@@ -45,7 +45,6 @@ target/
 /web-app/WEB-INF/classes
 
 # "temporary" build files
-target/
 out/
 build/
 
@@ -93,7 +92,6 @@ local.properties
 
 *.iml
 *.ipr
-*.iws
 .idea/
 
 ## .gitignore for linux

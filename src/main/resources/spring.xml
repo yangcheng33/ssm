@@ -25,7 +25,7 @@
     </bean>
 
     <!-- 定义在加载某个Bean前后调用的逻辑-->
-    <bean id="refBeanPostProcessor" class="com.github.vita.ssm.web.support.RefBeanPostProcessor"/>
+    <!--<bean id="refBeanPostProcessor" class="RefBeanPostProcessor"/>-->
 
     <!-- 使得被加载的Bean被代理后，仍然能够通过context.getBean()获取到。 注意，必须导入cglib.jar-->
     <aop:aspectj-autoproxy proxy-target-class="true"/>

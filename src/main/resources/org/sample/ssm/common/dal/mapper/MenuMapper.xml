@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC  "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.sample.ssm.common.dal.MenuDao">
+
+    <!-- ============================= INSERT ============================= -->
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO menu( id,pid,code,name,url,order_no,create_time,
+                         create_user,update_time )
+        VALUES ( #{id},#{pid},#{code},#{name},#{url},#{orderNo},#{createTime},
+                 #{createUser},#{updateTime})
+    </insert>
+
+
+    <insert id="saveBatch">
+        INSERT INTO menu( id,pid,code,name,url,order_no,create_time,
+        create_user,update_time )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.id},#{item.pid},#{item.code},#{item.name},#{item.url},#{item.funcItems},#{item.createTime},
+            #{item.createUser},#{item.updateTime} )
+        </foreach>
+    </insert>
+
+
+    <!--
+    <insert id="saveBatch">
+        INSERT INTO menu( id,pid,name,url,order_no,func_items,create_time,
+                          create_user,update_time )
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            SELECT #{item.id},#{item.pid},#{item.name},#{item.url},#{item.orderNo},#{item.funcItems},#{item.createTime},
+              #{item.createUser},#{item.updateTime} 
+              FROM DUAL 
+        </foreach>
+    </insert>
+
+    -->
+
+    <!-- ============================= UPDATE ============================= -->
+    <update id="update">
+        UPDATE menu
+        <set>
+            pid=#{pid},
+            code=#{code},
+            name=#{name},
+            url=#{url},
+            order_no=#{orderNo},
+            create_time=#{createTime},
+            create_user=#{createUser},
+            update_time=#{updateTime},
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateIgnoreNull">
+        UPDATE menu
+        <set>
+            <if test="pid!= null">pid=#{pid},</if>
+            <if test="code!= null">code=#{code},</if>
+            <if test="name!= null">name=#{name},</if>
+            <if test="url!= null">url=#{url},</if>
+            <if test="orderNo!= null">order_no=#{orderNo},</if>
+            <if test="createTime!= null">create_time=#{createTime},</if>
+            <if test="createUser!= null">create_user=#{createUser},</if>
+            <if test="updateTime!= null">update_time=#{updateTime},</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            UPDATE menu
+            <set>
+                pid=#{item.pid},
+                code=#{code},
+                name=#{item.name},
+                url=#{item.url},
+                order_no=#{item.orderNo},
+                create_time=#{item.createTime},
+                create_user=#{item.createUser},
+                update_time=#{item.updateTime},
+            </set>
+            WHERE id=#{item.id}
+        </foreach>
+    </update>
+
+
+    <!-- ============================= DELETE ============================= -->
+    <delete id="delete">
+        DELETE FROM menu
+        WHERE id=#{id} 
+    </delete>
+
+    <delete id="deleteBatch">
+        DELETE FROM menu
+        WHERE
+        <foreach collection="list" item="item" index="index" open="(" separator="OR" close=")">
+            id=#{item.id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByPK">
+        DELETE FROM menu
+        WHERE id=#{id} 
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM menu
+    </delete>
+
+
+    <delete id="deleteByIds">
+        DELETE FROM menu
+        WHERE
+        <foreach collection="list" item="item" index="index" open="(" separator="OR" close=")">
+            id=#{item}
+        </foreach>
+    </delete>
+
+    <!-- ============================= SELECT ============================= -->
+    <select id="count" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM menu
+    </select>
+
+    <select id="findByPK" resultType="Menu">
+        SELECT a.id,a.pid,a.code,a.name,a.url,a.order_no,a.create_time,a.create_user
+        ,a.update_time, b.name pname
+        FROM menu a left outer join menu b on a.pid = b.id
+        WHERE a.id=#{id}
+    </select>
+
+    <select id="findByUK" resultType="Menu">
+        SELECT a.*
+        FROM menu a
+        WHERE a.code=#{code}
+    </select>
+
+    <select id="find" resultType="Menu">
+        SELECT a.id,a.pid,a.code,a.name,a.url,a.order_no,a.create_time,a.create_user
+        ,a.update_time, b.name pname
+        FROM menu a left outer join menu b on a.pid = b.id
+    <where>
+        <if test="pid!= null">
+            AND a.pid = #{pid}
+        </if>
+        <if test="menuName!= null">
+            AND a.name like #{menuName}
+        </if>
+        <if test="pname!= null">
+            AND b.name like #{pname}
+        </if>
+    </where>
+</select>
+
+
+    <select id="findSubMenus" resultType="Menu">
+        select distinct c.id,c.pid,c.code,c.name,c.url
+        from user_role a, role_menu b, menu c
+        where a.role_id = b.role_id and b.menu_id = c.id
+        and a.user_id=#{userId} and c.pid=#{menuId}
+        order by c.order_no
+    </select>
+
+</mapper>
