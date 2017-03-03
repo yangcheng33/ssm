@@ -32,8 +32,8 @@
 
     <!-- 扫描并加载Service层注解了的@Service,@Component等的类, 支持通配符*和**,逗号分隔多个包路径 -->
     <!--include-filter & exclude-filter see http://docs.spring.io/spring/docs/3.0.0.M4/reference/html/ch03s10.html-->
-    <context:component-scan base-package="com.github.vita.ssm.biz"/>
-    <context:component-scan base-package="com.github.vita.ssm.common.dal"/>
+    <context:component-scan base-package="org.sample.ssm.biz"/>
+    <context:component-scan base-package="org.sample.ssm.common.dal"/>
 
 
     <!-- 配置MyBatis session工厂 -->
@@ -41,12 +41,12 @@
         <property name="dataSource" ref="dataSource"/>
 
         <!-- 对应实体类所在的包，将自动取对应包中不包括包名的简单类名作为带包名的别名 -->
-        <property name="typeAliasesPackage" value="com.github.vita.ssm.web.vo
-                                                  ,com.github.vita.ssm.common.po"/>
+        <property name="typeAliasesPackage" value="org.sample.ssm.web.vo
+                                                  ,org.sample.ssm.common.po"/>
 
         <!-- 载入mybatis配置 -->
         <property name="configLocation" value="classpath:mybatis.xml"/>
-        <property name="mapperLocations" value="classpath*:com/github/vita/ssm/**/mapper/*.xml"/>
+        <property name="mapperLocations" value="classpath*:org/sample/ssm/**/mapper/*.xml"/>
     </bean>
 
     <!-- 事务管理 -->
@@ -81,7 +81,7 @@
     -->
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.github.vita.ssm.common.dal"/>
+        <property name="basePackage" value="org.sample.ssm.common.dal"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 

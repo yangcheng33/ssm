@@ -1,4 +1,4 @@
-package org.sample.ssm.web.support;
+package org.sample.ssm.web.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
