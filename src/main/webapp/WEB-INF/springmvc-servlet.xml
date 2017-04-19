@@ -3,13 +3,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
-       default-lazy-init = "false">
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+       default-lazy-init="false">
 
 
     <!-- 所有以/resources路径开头的请求都会由应用程序根目录下的/resources目录提供服务 -->
@@ -32,43 +30,69 @@
 
     <!-- 扫描并加载control层的类 -->
     <context:component-scan base-package="org.sample.ssm.web"/>
-    <mvc:annotation-driven/>
 
-
-    <!-- 指定返回内容的编码 -->
-    <bean id="stringHttpMessageConverter"
-          class="org.springframework.http.converter.StringHttpMessageConverter">
-        <constructor-arg value="UTF-8" index="0"></constructor-arg><!--
-            避免出现乱码 -->
-        <property name="supportedMediaTypes">
+    <!-- fastJson配置类 -->
+    <bean id="fastJsonConfig" class="com.alibaba.fastjson.support.config.FastJsonConfig">
+        <!-- Default charset -->
+        <property name="charset" value="UTF-8"/>
+        <!-- Default dateFormat -->
+        <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+        <!-- Feature -->
+        <!-- 字段解读 http://blog.csdn.net/zgmzyr/article/details/8478563 -->
+        <!--<property name="features">-->
+        <!--<list>-->
+        <!--<value>Your feature</value>-->
+        <!--</list>-->
+        <!--</property>-->
+        <!--SerializerFeature -->
+        <property name="serializerFeatures">
             <list>
-                <value>text/plain;charset=UTF-8</value>
+                <value>WriteMapNullValue</value>
             </list>
         </property>
+        <!--Global SerializeFilter -->
+        <!--<property name="serializeFilters">-->
+        <!--<list>-->
+        <!--<ref bean="Your serializer filter"/>-->
+        <!--</list>-->
+        <!--</property>-->
+        <!-- Class Level SerializeFilter -->
+        <!--<property name="classSerializeFilters">-->
+        <!--<map>-->
+        <!--<entry key="Your filter class" value-ref="Your serializer filter"/>-->
+        <!--</map>-->
+        <!--</property>-->
     </bean>
-    <bean id="fastJsonHttpMessageConverter"
-          class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-        <property name="supportedMediaTypes">
-            <list>
-                <value>application/json;charset=UTF-8</value>
-                <value>text/html;charset=UTF-8</value><!-- 避免IE出现下载JSON文件的情况 -->
-            </list>
-        </property>
-        <!--它是用来控制json序列化输出时的一些额外属性,比如说该字段是否输出、输出时key使用单引号还是双引号、key不使用任何引号等等
-            QuoteFieldNames:输出key时是否使用双引号,默认为true
-            WriteMapNullValue:是否输出值为null的字段,默认为false
-            WriteNullNumberAsZero:数值字段如果为null,输出为0,而非null
-            WriteNullListAsEmpty:List字段如果为null,输出为[],而非null
-            WriteNullStringAsEmpty:字符类型字段如果为null,输出为"",而非null
-            WriteNullBooleanAsFalse:Boolean字段如果为null,输出为false,而非null
-            详见 com.alibaba.fastjson.serializer.SerializerFeature.java -->
-        <property name="features">
-            <util:list>
-                 <value>WriteMapNullValue</value>
-                <value>WriteDateUseDateFormat</value>
-            </util:list>
-        </property>
-    </bean>
+
+    <mvc:annotation-driven>
+        <!-- 适用于直接返回对象的时候 -->
+        <mvc:message-converters>
+            <!-- 配置文档https://github.com/alibaba/fastjson/wiki/FastJsonHttpMessageConverter_CN -->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <!-- MediaTypes -->
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value><!-- 避免IE出现下载JSON文件的情况 -->
+                    </list>
+                </property>
+                <!-- FastJsonConfig -->
+                <property name="fastJsonConfig" ref="fastJsonConfig"/>
+            </bean>
+
+            <!-- 指定返回内容的编码 -->
+            <bean id="stringHttpMessageConverter"
+                  class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8" index="0"></constructor-arg>
+                <!-- 避免出现乱码 -->
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <!-- 文件上传配置 -->
     <bean id="multipartResolver"
