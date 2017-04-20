@@ -1,6 +1,6 @@
 package org.sample.ssm.web.filter;
 
-import com.didichuxing.ep.code.commons.utils.HTMLFilter;
+import org.sample.ssm.common.utils.HTMLFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
