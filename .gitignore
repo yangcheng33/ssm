@@ -1,5 +1,6 @@
 # 项目关键信息
-config.properties
+# config.properties
+Main.java
 
 # .gitignore for maven
 target/

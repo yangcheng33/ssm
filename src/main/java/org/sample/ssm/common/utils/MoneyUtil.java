@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 /**
  * 金额转换程序，负责把浮点型的金额转为法律层面认可的大写金额。
  *
- * @author HuQingmiao
  */
 public class MoneyUtil {
 

@@ -4,25 +4,23 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
-public class Menu extends BasicVo {
-    private static final long serialVersionUID = 1L;
+public class Menu {
 
-    private Long id;
-    private Long pid;
-    private String code;
-    private String name;
-    private String url;
-    private Short orderNo;
+    private Long               id;
+    private Long               pid;
+    private String             code;
+    private String             name;
+    private String             url;
+    private Short              orderNo;
     private java.sql.Timestamp createTime;
-    private String createUser;
+    private String             createUser;
     private java.sql.Timestamp updateTime;
 
-    private String pname;       // 父菜单名称
+    private String     pname;       // 父菜单名称
     private List<Menu> subMenus;// 子菜单
 
-    private String funcItems;   // 功能项，格式为："功能1的id:功能1的名称;功能2的id:功能2的名称;..."
+    private String              funcItems;   // 功能项，格式为："功能1的id:功能1的名称;功能2的id:功能2的名称;..."
     private Map<String, String> funcIdNameMap;
-
 
     public Long getId() {
         return id;

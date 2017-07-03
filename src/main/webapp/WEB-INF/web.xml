@@ -4,14 +4,19 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
             http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-    <display-name>Archetype Created Web Application</display-name>
+    <display-name>ssm</display-name>
 
     <!-- 为ContextLoaderListener 指定加载的配置文件 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            classpath:spring.xml
+            classpath:env-config.xml, classpath:spring.xml
         </param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>spring.profiles.active</param-name>
+        <param-value>${profiles.activation}</param-value>
     </context-param>
 
     <!-- ContextLoaderListener 用于加载spring的其它配置文件 -->
@@ -42,8 +47,12 @@
 
     <filter>
         <filter-name>sessionFilter</filter-name>
-        <filter-class>org.sample.ssm.web.support.SessionFilter</filter-class>
+        <filter-class>org.sample.ssm.web.filter.SessionFilter</filter-class>
     </filter>
+    <filter-mapping>
+        <filter-name>sessionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <filter>
         <filter-name>encodingFilter</filter-name>
@@ -61,16 +70,33 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
-
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>XssSqlFilter</filter-name>
+        <filter-class>org.sample.ssm.web.filter.XssFilter</filter-class>
+    </filter>
     <filter-mapping>
-        <filter-name>sessionFilter</filter-name>
+        <filter-name>XssSqlFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <filter>
+        <filter-name>CORSFilter</filter-name>
+        <filter-class>org.sample.ssm.web.filter.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CORSFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/error-404.html</location>
+    </error-page>
 
 
     <!-- 配置session超时时间，单位分钟 -->
@@ -80,24 +106,24 @@
 
     <!-- 访问根目录时采用欢迎界面路径 -->
     <!--<welcome-file-list>-->
-        <!--<welcome-file>index.jsp</welcome-file>-->
+    <!--<welcome-file>index.jsp</welcome-file>-->
     <!--</welcome-file-list>-->
 
     <!-- 错误跳转页面 -->
     <!--<error-page>-->
-        <!--&lt;!&ndash; 路径不正确 &ndash;&gt;-->
-        <!--<error-code>404</error-code>-->
-        <!--<location>/WEB-INF/errorpage/404.jsp</location>-->
+    <!--&lt;!&ndash; 路径不正确 &ndash;&gt;-->
+    <!--<error-code>404</error-code>-->
+    <!--<location>/WEB-INF/errorpage/404.jsp</location>-->
     <!--</error-page>-->
     <!--<error-page>-->
-        <!--&lt;!&ndash; 没有访问权限，访问被禁止 &ndash;&gt;-->
-        <!--<error-code>405</error-code>-->
-        <!--<location>/WEB-INF/errorpage/405.jsp</location>-->
+    <!--&lt;!&ndash; 没有访问权限，访问被禁止 &ndash;&gt;-->
+    <!--<error-code>405</error-code>-->
+    <!--<location>/WEB-INF/errorpage/405.jsp</location>-->
     <!--</error-page>-->
     <!--<error-page>-->
-        <!--&lt;!&ndash; 内部错误 &ndash;&gt;-->
-        <!--<error-code>500</error-code>-->
-        <!--<location>/WEB-INF/errorpage/500.jsp</location>-->
+    <!--&lt;!&ndash; 内部错误 &ndash;&gt;-->
+    <!--<error-code>500</error-code>-->
+    <!--<location>/WEB-INF/errorpage/500.jsp</location>-->
     <!--</error-page>-->
 
 </web-app>

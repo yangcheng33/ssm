@@ -164,12 +164,4 @@ public class BasicForm implements Serializable {
         this.messageStatus = messageStatus;
     }
 
-    /**
-     * BasicForm
-     *
-     * @author Yang Cheng
-     * @date 2016-09-02
-     */
-    public static class BasicForm {
-    }
 }

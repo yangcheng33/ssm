@@ -1,11 +1,16 @@
 package org.sample.ssm.web.filter;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 跨域
+ * 请求头添加跨域支持.
  *
  * @author Yang Cheng
  * @date 2016-11-01

@@ -1,19 +1,29 @@
 package org.sample.ssm.common.utils;
 
-import java.io.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
  * 文件压缩与解压
  *
- * @author HuQingmiao
  */
 public class ZipUtil {
+
+    private static Logger logger = LoggerFactory.getLogger(ZipUtil.class);
 
     // 压缩过程中产生的临时文件的扩展名
     private static final String EXTEND_NAME_TMP = ".tmp";
@@ -36,8 +46,7 @@ public class ZipUtil {
         FileInputStream fis = null;
         try {
             // 压缩过程中, 先输出到临时文件. 待压缩完成后, 再将临时文件改名为正式文件名
-            File tmpOutFile = new File(outFile.getCanonicalPath()
-                    + EXTEND_NAME_TMP);
+            File tmpOutFile = new File(outFile.getCanonicalPath() + EXTEND_NAME_TMP);
             fos = new FileOutputStream(tmpOutFile);
             zos = new ZipOutputStream(new BufferedOutputStream(fos));
 
@@ -53,7 +62,7 @@ public class ZipUtil {
             tmpOutFile.renameTo(outFile);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn("", e);
             return false;
         } finally {
             if (zos != null) {
@@ -73,32 +82,39 @@ public class ZipUtil {
         return true;
     }
 
-
     /**
      * 压缩
      *
-     * @param inFiles 读入的需要压缩的文件集合
+     * @param inFiles 读入的需要压缩的文件集合,不保留文件路径,全放在一级目录下
      * @param outFile 输出的压缩文件
      * @return 是否成功处理
      */
     public static boolean zip(List<File> inFiles, File outFile) throws IOException {
+        return zip(inFiles, null, outFile);
+    }
 
-        FileOutputStream fos = null;
-        ZipOutputStream zos = null;
-        BufferedInputStream bis = null;
-        FileInputStream fis = null;
-        try {
+    /**
+     * 压缩
+     *
+     * @param inFiles    读入的需要压缩的文件集合
+     * @param parentFile 父目录路径,保留子目录路径
+     * @param outFile    输出的压缩文件
+     * @return 是否成功处理
+     */
+    public static boolean zip(List<File> inFiles, File parentFile, File outFile) throws IOException {
+        File tmpOutFile = new File(outFile.getCanonicalPath() + EXTEND_NAME_TMP);
+        try (FileOutputStream fos = new FileOutputStream(tmpOutFile);
+             ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(fos))) {
             // 压缩过程中, 先输出到临时文件. 待压缩完成后, 再将临时文件改名为正式文件名
-            File tmpOutFile = new File(outFile.getCanonicalPath()
-                    + EXTEND_NAME_TMP);
-            fos = new FileOutputStream(tmpOutFile);
-            zos = new ZipOutputStream(new BufferedOutputStream(fos));
-
             for (File f : inFiles) {
                 if (!f.exists()) {
                     continue;
                 }
-                recursion(f.getCanonicalPath(), f, zos);
+                if (parentFile == null) {
+                    recursion(f.getCanonicalPath(), f, zos);
+                } else {
+                    recursion(parentFile.getCanonicalPath(), f, zos);
+                }
             }
 
             zos.flush();
@@ -111,21 +127,11 @@ public class ZipUtil {
             tmpOutFile.renameTo(outFile);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            if (tmpOutFile.isFile()) {
+                tmpOutFile.delete();
+            }
+            logger.warn("", e);
             return false;
-        } finally {
-            if (zos != null) {
-                zos.close();
-            }
-            if (fos != null) {
-                fos.close();
-            }
-            if (bis != null) {
-                bis.close();
-            }
-            if (fis != null) {
-                fis.close();
-            }
         }
 
         return true;
@@ -144,8 +150,7 @@ public class ZipUtil {
             outFilename = inFile.getCanonicalPath() + EXTEND_NAME_ZIP;
         } else {
             int idx = inFile.getCanonicalPath().lastIndexOf('.');
-            outFilename = inFile.getCanonicalPath().substring(0, idx)
-                    + EXTEND_NAME_ZIP;
+            outFilename = inFile.getCanonicalPath().substring(0, idx) + EXTEND_NAME_ZIP;
         }
 
         File outFile = new File(outFilename);
@@ -162,10 +167,8 @@ public class ZipUtil {
      * @param firstAbsFilename 第一遍递归时, 读入文件的绝对文件名, 即待压缩文件的第一层文件的绝对文件名
      * @param inFile           当前读入的待压缩的文件
      * @param zos              输出的ZipOutputStream对象
-     * @throws java.io.IOException
      */
-    private static void recursion(String firstAbsFilename, File inFile,
-                                  ZipOutputStream zos) throws IOException {
+    private static void recursion(String firstAbsFilename, File inFile, ZipOutputStream zos) throws IOException {
 
         final int BUFFER_SIZE = 4096;
 
@@ -173,7 +176,7 @@ public class ZipUtil {
         FileInputStream fis = null;
         try {
 
-            File[] files = null;
+            File[] files;
             if (inFile.isDirectory()) {// 如果是目录文件, 则递归对其下的文件处理
                 files = inFile.listFiles();
 
@@ -193,16 +196,14 @@ public class ZipUtil {
                 // 当前待压缩项的相对于第一层文件的文件名
                 String contextFilename = "";
                 if (inAbsFilename.length() > firstAbsFilename.length()) {
-                    contextFilename = inAbsFilename.substring(firstAbsFilename
-                            .trim().length() + 1);
+                    contextFilename = inAbsFilename.substring(firstAbsFilename.trim().length() + 1);
                 }
 
                 String entryName = null;
                 if ("".equals(contextFilename)) {
                     entryName = firstFilename;
                 } else {
-                    entryName = firstFilename + File.separator
-                            + contextFilename;
+                    entryName = firstFilename + File.separator + contextFilename;
                 }
 
                 byte data[] = new byte[BUFFER_SIZE];
@@ -242,6 +243,7 @@ public class ZipUtil {
      * @param inFile 读入的需要解压的文件
      * @return 解压后得到的文件列表, 不含目录
      */
+    @Deprecated
     public static List unzip(File inFile) throws IOException {
         final int BUFFER_SIZE = 4096;
 
@@ -261,15 +263,13 @@ public class ZipUtil {
 
                 // 在此, 只是把目录作为一个file读出来, 其下的文件将在后面被迭代到
                 if (entry.isDirectory()) {
-                    new File(outFile.getCanonicalPath() + File.separator
-                            + entry.getName()).mkdirs();
+                    new File(outFile.getCanonicalPath() + File.separator + entry.getName()).mkdirs();
                     continue;
                 }
 
                 // 由于ZipFile读取文件是随机的,这就可能先读取某文件,而这个文件所在的目录还不存在,
                 // 所以要创建该文件的父目录.
-                File file = new File(outFile.getCanonicalPath()
-                        + File.separator + entry.getName());
+                File file = new File(outFile.getCanonicalPath() + File.separator + entry.getName());
                 File parent = file.getParentFile();
                 if (parent != null && (!parent.exists())) {
                     parent.mkdirs();
@@ -319,6 +319,7 @@ public class ZipUtil {
      * @param dir    解压到的目录
      * @return 解压后得到的文件列表, 不含目录
      */
+    @Deprecated
     public static List unzip(File inFile, String dir) throws IOException {
         final int BUFFER_SIZE = 4096;
 
@@ -336,15 +337,13 @@ public class ZipUtil {
 
                 // 在此, 只是把目录作为一个file读出来, 其下的文件将在后面被迭代到
                 if (entry.isDirectory()) {
-                    new File(dir + File.separator
-                            + entry.getName()).mkdirs();
+                    new File(dir + File.separator + entry.getName()).mkdirs();
                     continue;
                 }
 
                 // 由于ZipFile读取文件是随机的,这就可能先读取某文件,而这个文件所在的目录还不存在,
                 // 所以要创建该文件的父目录.
-                File file = new File(dir
-                        + File.separator + entry.getName());
+                File file = new File(dir + File.separator + entry.getName());
                 File parent = file.getParentFile();
                 if (parent != null && (!parent.exists())) {
                     parent.mkdirs();
@@ -354,7 +353,7 @@ public class ZipUtil {
                 bos = new BufferedOutputStream(fos, BUFFER_SIZE);
 
                 bis = new BufferedInputStream(zipFile.getInputStream(entry));
-                int count = 0;
+                int count;
                 byte data[] = new byte[BUFFER_SIZE];
                 while ((count = bis.read(data, 0, BUFFER_SIZE)) != -1) {
                     bos.write(data, 0, count);
@@ -387,9 +386,55 @@ public class ZipUtil {
         return fileList;
     }
 
+    /**
+     * 解压缩文件.
+     *
+     * @param archive        压缩包文件
+     * @param destinationDir 目的解压目录路径
+     * @throws IOException the io exception
+     */
+    public static void unzipFile(File archive, String destinationDir) throws IOException {
+        final int BUFFER_SIZE = 4096;
+        try (FileInputStream fis = new FileInputStream(archive);
+             ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis))) {
+            ZipEntry entry;
+            File destFile;
+            while ((entry = zis.getNextEntry()) != null) {
+                if (destinationDir == null) {
+                    destFile = new File(archive.getParentFile().getCanonicalPath() + File.separator + entry.getName());
+                } else {
+                    destFile = new File(destinationDir + File.separator + entry.getName());
+                }
+                if (entry.isDirectory()) {
+                    destFile.mkdirs();
+                    continue;
+                }
+                int count;
+                byte data[] = new byte[BUFFER_SIZE];
+                destFile.getParentFile().mkdirs();
+                try (FileOutputStream fos = new FileOutputStream(destFile);
+                     BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER_SIZE)) {
+                    while ((count = zis.read(data, 0, BUFFER_SIZE)) != -1) {
+                        dest.write(data, 0, count);
+                    }
+                    dest.flush();
+                }
+            }
+        }
+    }
+
+    /**
+     * 解压缩文件到当前目录.
+     *
+     * @param archive        压缩包文件
+     * @throws IOException the io exception
+     */
+    public static void unzipFile(File archive) throws IOException {
+        unzipFile(archive, null);
+    }
 
     public static void main(String args[]) {
-        File in = new File("d:/跟踪事项.xls");
+        File in = new File("d:/xx.xls");
         try {
             System.out.println(">>");
             File out = ZipUtil.zip(in);
