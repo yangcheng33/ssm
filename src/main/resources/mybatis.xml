@@ -33,12 +33,17 @@
         <!--<typeAlias type="net.mybatis.model.User" alias="User"/>-->
     <!--</typeAliases>-->
 
-    <plugins>
-        <!-- 分页查询拦截器 -->
-        <plugin interceptor="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">
-            <property name="dialectClass"
-                      value="com.github.miemiedev.mybatis.paginator.dialect.MySQLDialect"/>
-        </plugin>
-    </plugins>
+    <!--<plugins>-->
+        <!--&lt;!&ndash; 分页查询拦截器 &ndash;&gt;-->
+        <!--<plugin interceptor="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">-->
+            <!--<property name="dialectClass"-->
+                      <!--value="com.github.miemiedev.mybatis.paginator.dialect.MySQLDialect"/>-->
+        <!--</plugin>-->
+    <!--</plugins>-->
+
+    <!-- 扫描自定义类型转换器 -->
+    <typeHandlers>
+        <package name="org.sample.ssm.common.typehandler"/>
+    </typeHandlers>
 
 </configuration>
