@@ -85,17 +85,17 @@
     <!-- 扫描并加载 basePackage下的DAO/Mapper接口 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
           destroy-method="close">
-        <property name="driverClassName" value="${jdbcDriver}"/>
-        <property name="url" value="${jdbcUrl}"/>
-        <property name="username" value="${username}"/>
-        <property name="password" value="${password}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
 
         <!-- 初始化连接大小 -->
-        <property name="initialSize" value="${initialSize}"/>
+        <property name="initialSize" value="${jdbc.initialSize}"/>
         <!-- 连接池最小空闲量 -->
-        <property name="minIdle" value="${minIdle}"/>
+        <property name="minIdle" value="${jdbc.minIdle}"/>
         <!-- 连接池最大使用连接数量 -->
-        <property name="maxActive" value="${maxActive}"/>
+        <property name="maxActive" value="${jdbc.maxActive}"/>
         <!-- 配置获取连接最长等待超时的时间 -->
         <property name="maxWait" value="50000"/>
         <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
