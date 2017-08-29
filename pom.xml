@@ -355,19 +355,6 @@
                     </webResources>
                 </configuration>
             </plugin>
-            <!-- spring热部署(debug模式下)-->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.5.1.RELEASE</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>springloaded</artifactId>
-                        <version>1.2.6.RELEASE</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
             <!-- checkstyle 配置 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
