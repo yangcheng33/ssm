@@ -10,13 +10,26 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            classpath:env-config.xml, classpath:spring.xml
+            classpath:classpath:spring.xml
         </param-value>
     </context-param>
 
+    <!--
+        spring提供多种启用profile的方式：
+        1.ENV方式： ConfigurableEnvironment.setActiveProfiles("dev")
+        2.JVM参数方式: -Dspring.profiles.active="dev"
+        3.web.xml方式：如下
+        4.标注方式（用于junit单元测试）：
+        @ActiveProfiles({"unittest","dev"})
+    -->
     <context-param>
         <param-name>spring.profiles.active</param-name>
         <param-value>${profiles.activation}</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>prod</param-value>
     </context-param>
 
     <!-- ContextLoaderListener 用于加载spring的其它配置文件 -->

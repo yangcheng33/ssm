@@ -15,11 +15,8 @@
 						http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
-    <context:property-placeholder
-            location="
-                classpath*:config.properties,
-                classpath*:configuration.properties"
-            ignore-unresolvable="true"/>
+    <context:property-placeholder location=" classpath:configuration.properties"
+                                  ignore-unresolvable="true"/>
 
     <!-- 定义在加载某个Bean前后调用的逻辑-->
     <!--<bean id="refBeanPostProcessor" class="RefBeanPostProcessor"/>-->
@@ -43,7 +40,7 @@
 
         <!-- 载入mybatis配置 -->
         <property name="configLocation" value="classpath:mybatis.xml"/>
-        <!--<property name="mapperLocations" value="classpath*:org/sample/ssm/**/mapper/*.xml"/>-->
+        <!--<property name="mapperLocations" value="classpath:org/sample/ssm/**/mapper/*.xml"/>-->
     </bean>
 
     <!-- 事务管理 -->
