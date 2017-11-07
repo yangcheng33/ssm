@@ -14,7 +14,7 @@
 
     <mvc:default-servlet-handler/>
 
-    <import resource="classpath:env-config.xml"/>
+    <import resource="classpath:env-profile.xml"/>
 
     <context:property-placeholder location="classpath:configuration.properties"/>
 

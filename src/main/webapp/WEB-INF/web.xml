@@ -60,7 +60,7 @@
 
     <filter>
         <filter-name>sessionFilter</filter-name>
-        <filter-class>org.sample.ssm.web.filter.SessionFilter</filter-class>
+        <filter-class>org.sample.ssm.web.filter.RequestLogFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>sessionFilter</filter-name>
