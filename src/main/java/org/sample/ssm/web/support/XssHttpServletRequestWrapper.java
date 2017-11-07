@@ -42,8 +42,9 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     public String getHeader(String name) {
         String value = super.getHeader(name);
-        if (value == null)
+        if (value == null) {
             return null;
+        }
         return cleanXSS(value);
     }
 

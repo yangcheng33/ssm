@@ -17,9 +17,11 @@ import java.util.List;
 public class AuthInterceptor implements HandlerInterceptor {
 
     private List<String> excludeUrls;// 不需要拦截的资源
+
     public List<String> getExcludeUrls() {
         return excludeUrls;
     }
+
     public void setExcludeUrls(List<String> excludeUrls) {
         this.excludeUrls = excludeUrls;
     }

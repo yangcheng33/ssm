@@ -1,5 +1,4 @@
-# 项目关键信息
-# config.properties
+# project specific file
 LocalMain.java
 
 # .gitignore for maven
@@ -131,3 +130,4 @@ Icon
 !wrapper/*.jar
 !**/wrapper/*.jar
 >>>>>>> origin/master
+/${sys:catalina.base}/

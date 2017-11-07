@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class JacksonUtil {
 
-    private final static ObjectMapper DEFAULT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper DEFAULT_MAPPER = new ObjectMapper();
 
     static {
         // DEFAULT_MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
@@ -113,8 +113,7 @@ public class JacksonUtil {
      * 将json转换为list格式,并指定子对象类型
      */
     public static List getListFromJson(String json, Class nodeClass) throws IOException {
-        JavaType type = DEFAULT_MAPPER.getTypeFactory().
-            constructCollectionType(List.class, nodeClass);
+        JavaType type = DEFAULT_MAPPER.getTypeFactory().constructCollectionType(List.class, nodeClass);
         return DEFAULT_MAPPER.readValue(json, type);
     }
 

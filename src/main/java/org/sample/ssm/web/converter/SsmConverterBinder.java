@@ -12,7 +12,7 @@ import java.beans.PropertyEditorSupport;
  * @version v 0.1 2017-06-01 16:55
  */
 public class SsmConverterBinder {
-    static public void bindParam(WebDataBinder binder) {
+    public static void bindParam(WebDataBinder binder) {
         binder.registerCustomEditor(AppOSEnum.class, new PropertyEditorSupport() {
             @Override
             public void setAsText(final String text) throws IllegalArgumentException {

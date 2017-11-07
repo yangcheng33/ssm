@@ -35,22 +35,22 @@ public class BasicForm implements Serializable {
     protected String              messageStatus;
 
     /** 开始时间后缀*/
-    protected final static String START_TIME_SUFFIX  = " 00:00";
+    protected static final String START_TIME_SUFFIX  = " 00:00";
 
     /** 结束时间后缀*/
-    protected final static String END_TIME_SUFFIX    = " 23:59";
+    protected static final String END_TIME_SUFFIX    = " 23:59";
 
     /** 开始时间后缀*/
-    protected final static String START_TIME_SUFFIX2 = ":00.000";
+    protected static final String START_TIME_SUFFIX2 = ":00.000";
 
     /** 结束时间后缀*/
-    protected final static String END_TIME_SUFFIX2   = ":59.999";
+    protected static final String END_TIME_SUFFIX2   = ":59.999";
 
     /** 下载最大值 */
-    protected final static Long   DOWNLOAD_MAXSIZE   = 5000L;
+    protected static final Long   DOWNLOAD_MAXSIZE   = 5000L;
 
     /** 全部类型快照名字 */
-    protected final static String ALL                = "all";
+    protected static final String ALL                = "all";
 
     /**
      * 日期字符转换类
