@@ -1,4 +1,4 @@
-This project is used to provide a **java web structure template** for quickly creating a project.
+This project is used to provide a **java web structure template** for quickly starting a project.
 
 # Project framework:
 - Spring 4.3.2
@@ -6,10 +6,13 @@ This project is used to provide a **java web structure template** for quickly cr
 - MyBatis
 
 # Webapp Container:
-Tomcat 8.0.33
+- Tomcat 8.0.33
 
 # Database:
-MySql 5.7
+- MySql 5.7
 
-# java language
-java 8
+# Java Language
+- Java 8
+
+# Build Tool
+- Maven 3.3.9
