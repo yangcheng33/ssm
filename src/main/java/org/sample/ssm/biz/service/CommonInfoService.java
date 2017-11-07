@@ -5,6 +5,8 @@ import org.sample.ssm.common.po.AppDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 基本信息服务类.
  *
@@ -17,8 +19,8 @@ public class CommonInfoService extends BaseService {
     @Autowired
     private AppDOMapper appDOMapper;
 
-    public AppDO getApp(Long appId) {
-        return appDOMapper.selectByPrimaryKey(appId);
+    public List<AppDO> getApps() {
+        return appDOMapper.selectAllApp();
     }
 
 }

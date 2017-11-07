@@ -1,6 +1,5 @@
 package org.sample.ssm.web.interceptor;
 
-import org.sample.ssm.common.utils.HandlerMethodUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
@@ -22,11 +21,11 @@ public class PerformanceInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
         throws Exception {
-
-        HandlerMethod handlerMethod = HandlerMethodUtil.getHandleMethod(handler);
-        if (handlerMethod != null) {
-            startTimeThreadLocal.set(System.currentTimeMillis());
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
         }
+
+        startTimeThreadLocal.set(System.currentTimeMillis());
         return true;
     }
 
@@ -39,28 +38,27 @@ public class PerformanceInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
         throws Exception {
+        if (!(handler instanceof HandlerMethod)) {
+            return;
+        }
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Method method = handlerMethod.getMethod();
 
-        HandlerMethod handlerMethod = HandlerMethodUtil.getHandleMethod(handler);
-        if (handlerMethod != null) {
-            Method method = handlerMethod.getMethod();
+        CountTime annotation = method.getAnnotation(CountTime.class);
+        if (annotation == null) {
+            annotation = handlerMethod.getBeanType().getAnnotation(CountTime.class);
+        }
 
-            CountTime annotation = method.getAnnotation(CountTime.class);
-            if (annotation == null) {
-                annotation = handlerMethod.getBeanType().getAnnotation(CountTime.class);
-            }
-
-            if (annotation != null) {
-                printCostInfo(handlerMethod, annotation.forcePrint(), annotation.maxMilles());
-            } else {
-                printCostInfo(handlerMethod, false, 5000);
-            }
+        if (annotation != null) {
+            printCostInfo(handlerMethod, annotation.forcePrint(), annotation.maxMilles());
+        } else {
+            printCostInfo(handlerMethod, false, 5000);
         }
 
     }
 
     /**
-     * 打印时间统计信息 <br>
-     * <br>
+     * 打印时间统计信息。
      *
      * @param handlerMethod
      * @param forcePrint    强制打印
@@ -71,12 +69,11 @@ public class PerformanceInterceptor implements HandlerInterceptor {
         long cost = System.currentTimeMillis() - startTime;
 
         StringBuilder sb = new StringBuilder();
-        Method executor = HandlerMethodUtil.getHanderMethodExecutor(handlerMethod);
 
         boolean outofTime = cost > maxMilles;
         if (forcePrint || outofTime) {
 
-            sb.append(executor.toString());
+            sb.append(handlerMethod.getMethod().toString());
             sb.append(" cost:\t");
             sb.append(cost / 1000.0);
             sb.append("s");

@@ -16,3 +16,7 @@ CREATE TABLE IF NOT EXISTS `central_app` (
   `gmt_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+INSERT INTO `central_app` (`id`, `name`, `version`, `description`, `git_url`, `os`, `git_branch`, `creator`, `gmt_create`, `modifier`, `gmt_modified`)
+VALUES
+  (5, 'app', '1.0.1', 'test', '', 0, '', '', '2017-11-07 17:14:32', '', '2017-11-07 17:14:32');

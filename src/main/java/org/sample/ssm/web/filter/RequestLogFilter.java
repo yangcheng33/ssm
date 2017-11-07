@@ -18,9 +18,10 @@ import java.io.IOException;
  */
 public class RequestLogFilter implements Filter {
     private final String[]     logHeaders   = { "PUT", "POST", "DELETE" };
-    protected     Logger       log          = LoggerFactory.getLogger(this.getClass());
+    protected     Logger       logger       = LoggerFactory.getLogger(this.getClass());
     private       FilterConfig filterConfig = null;
 
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.filterConfig = filterConfig;
     }
@@ -33,20 +34,21 @@ public class RequestLogFilter implements Filter {
         this.filterConfig = filterConfig;
     }
 
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         if (StringUtils.containsAny(httpRequest.getMethod(), logHeaders)) {
-
-            log.debug(">>>{} {}", httpRequest.getMethod(), httpRequest.getServletPath());
+            logger.debug(">>> {} \t {}", httpRequest.getMethod(), httpRequest.getServletPath());
         }
 
         //请求路径 URL
         chain.doFilter(request, response);
     }
 
+    @Override
     public void destroy() {
     }
 }

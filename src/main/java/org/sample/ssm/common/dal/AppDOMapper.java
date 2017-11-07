@@ -83,8 +83,7 @@ public interface AppDOMapper {
 
     // user-defined
     @Select({
-        "select",
-        "id, name, os",
+        "select * ",
         "from central_app",
         "order by os, name"
     })

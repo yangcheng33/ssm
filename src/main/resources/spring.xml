@@ -14,9 +14,9 @@
 						http://www.springframework.org/schema/aop
 						http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+    <import resource="classpath:env-profile.xml"/>
 
-    <context:property-placeholder location=" classpath:configuration.properties"
-                                  ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:configuration.properties"/>
 
     <!-- 定义在加载某个Bean前后调用的逻辑-->
     <!--<bean id="refBeanPostProcessor" class="RefBeanPostProcessor"/>-->
