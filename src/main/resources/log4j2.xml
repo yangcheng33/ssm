@@ -9,8 +9,8 @@
             <PatternLayout pattern="[%level][%d{yyyy-MM-dd'T'HH:mm:ss.SSS}][%c{-3}:%M:%L] %msg%xEx{full}%n"/>
         </Console>
 
-        <!-- 只记录info及以上的信息 -->
-        <File name="file" fileName="${sys:catalina.base}/logs/ssm.log" append="true">
+        <!-- 只记录info及以上的信息 -->-
+        <File name="file" fileName="./logs/ssm.log" append="true">
             <PatternLayout pattern="[%level][%d{yyyy-MM-dd'T'HH:mm:ss.SSS}][%c{36}:%M:%L] %msg%xEx{full}%n"/>
             <Filters>
                 <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -18,7 +18,7 @@
         </File>
 
         <!-- 只记录debug及以上的信息 -->
-        <File name="debugfile" fileName="${sys:catalina.base}/logs/ssm.debug.log" append="true">
+        <File name="debugfile" fileName="./logs/ssm.debug.log" append="true">
             <PatternLayout pattern="[%level][%d{yyyy-MM-dd'T'HH:mm:ss.SSS}][%c{-3}:%M:%L] %msg%xEx{full}%n"/>
         </File>
 

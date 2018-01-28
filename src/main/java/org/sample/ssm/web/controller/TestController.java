@@ -1,6 +1,6 @@
 package org.sample.ssm.web.controller;
 
-import org.sample.ssm.biz.service.CommonInfoService;
+import org.sample.ssm.biz.service.AppInfoService;
 import org.sample.ssm.common.exception.BadRequestException;
 import org.sample.ssm.common.po.AppDO;
 import org.sample.ssm.web.converter.SsmConverterBinder;
@@ -28,7 +28,7 @@ import java.util.List;
 @Controller
 public class TestController extends BaseController {
     @Autowired
-    CommonInfoService commonInfoService;
+    AppInfoService appInfoService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -39,7 +39,7 @@ public class TestController extends BaseController {
     @ResponseBody
     public List<AppDO> getApps() {
         // GET http://localhost:8080/ssm/apps
-        return commonInfoService.getApps();
+        return appInfoService.getApps();
     }
 
     @RequestMapping(value = "test", method = RequestMethod.POST)

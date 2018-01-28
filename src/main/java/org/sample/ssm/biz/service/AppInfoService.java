@@ -14,13 +14,13 @@ import java.util.List;
  * @version v 0.1 2017-07-03 11:54
  */
 @Service
-public class CommonInfoService extends BaseService {
+public class AppInfoService extends BaseService {
 
     @Autowired
     private AppDOMapper appDOMapper;
 
     public List<AppDO> getApps() {
-        return appDOMapper.selectAllApp();
+        return appDOMapper.selectAll();
     }
 
 }

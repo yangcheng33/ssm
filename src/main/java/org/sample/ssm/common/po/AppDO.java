@@ -3,9 +3,16 @@ package org.sample.ssm.common.po;
 
 import org.sample.ssm.common.codetable.AppOSEnum;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
+@Table(name = "central_app")
 public class AppDO {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -114,5 +121,23 @@ public class AppDO {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AppDO{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", version='").append(version).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", os=").append(os);
+        sb.append(", gitUrl='").append(gitUrl).append('\'');
+        sb.append(", gitBranch='").append(gitBranch).append('\'');
+        sb.append(", creator='").append(creator).append('\'');
+        sb.append(", gmtCreate=").append(gmtCreate);
+        sb.append(", modifier='").append(modifier).append('\'');
+        sb.append(", gmtModified=").append(gmtModified);
+        sb.append('}');
+        return sb.toString();
     }
 }

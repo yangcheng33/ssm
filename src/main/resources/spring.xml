@@ -74,9 +74,13 @@
     </aop:config>
     -->
 
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="org.sample.ssm.common.dal"/>
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    <!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
+        <!--<property name="basePackage" value="org.sample.ssm.common.dal"/>-->
+        <!--<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>-->
+    <!--</bean>-->
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="org.sample.ssm.common.dal" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
     </bean>
 
     <!-- 扫描并加载 basePackage下的DAO/Mapper接口 -->
